@@ -3,6 +3,7 @@ package commands
 import (
 	"github.com/Khalturin/telegram-bot-demo/internal/service/product"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
+	"log"
 )
 
 type Commander struct {
@@ -20,6 +21,12 @@ func NewCommander(bot *tgbotapi.BotAPI,
 }
 
 func (c *Commander) HandleUpdate(update tgbotapi.Update) {
+	defer func() {
+		if panicValue := recover(); panicValue != nil {
+			log.Printf("recover from panic: %v", panicValue)
+		}
+	}()
+
 	if update.Message == nil { // ignore any non-Message Updates
 		return
 	}
